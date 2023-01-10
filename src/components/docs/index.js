@@ -1,23 +1,31 @@
 import React from "react";
 
-export const flattenData = async (data) => {
+export const flattenData = async (data, exampleOnly = false) => {
   const flat = [];
   await Promise.all(
     data.map(async dt => {
       if (dt.meta) {
-        flat.push({
+        const temp = exampleOnly && dt.example ? {
+          id: dt.id,
+          example: dt.example,
+        } : {
           id: dt.id,
           title: dt.title,
           desc: dt.desc,
-        });
+        }
+        flat.push(temp);
         if (dt.meta.hasChild) {
           await Promise.all(
             dt.meta.child.map(dt2 => {
-              flat.push({
+              const temp2 = exampleOnly && dt2.example ? {
+                id: dt2.id,
+                example: dt2.example,
+              } : {
                 id: dt2.id,
                 title: dt2.title,
                 desc: dt2.desc,
-              });
+              }
+              flat.push(temp2);
             })
           )
         }
@@ -27,52 +35,13 @@ export const flattenData = async (data) => {
   return flat;
 }
 
-const DocsBody = () => {
-  const [data, setData] = React.useState([
-    {
-      id: 1,
-      title: "Bikin buku cerita",
-      desc: `Mantap`,
-      meta: {
-        hasChild: false
-      }
-    },
-    {
-      id: 2,
-      title: "Bikin buku karate",
-      desc: `Mantap`,
-      meta: {
-        hasChild: true,
-        child: [
-          {
-            id: 3,
-            title: "Karate Chop",
-            desc: `Mantap`
-          },
-          {
-            id: 55,
-            title: "Axe Kick",
-            desc: `Mantap`
-          },
-        ]
-      }
-    },
-  ]);
-  React.useEffect(async () => {
-    const organizeData = await flattenData(data);
-    setData(organizeData);
-  }, []);
+const DocsBody = ({ data }) => {
+  const { id, title, desc } = data;
   return (
-    <>
-      {data.map(dt => {
-        return (
-          <div className="p-4" id={dt.id}>
-            <div className="text-2xl font-semibold mb-2">{dt.title}</div>
-            <div className="bg-slate-200 p-2 rounded-md text-sm">{dt.desc}</div>
-          </div>
-        )
-      })}
-    </>
+    <div className="p-4 min-h-[200px]" id={id}>
+      <div className="text-2xl font-semibold mb-2">{title}</div>
+      <div className="bg-slate-200 p-2 rounded-md text-sm">{desc}</div>
+    </div>
   )
 }
 

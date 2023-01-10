@@ -1,4 +1,5 @@
 import React from "react";
+import art from "../../content/article.yaml";
 
 const Sidebar = () => {
   const [active, setActive] = React.useState(0);
@@ -25,11 +26,12 @@ const Sidebar = () => {
     const handleOpenChildMenu = () => {
       setOpen(!isOpen);
       set(id);
+      scrollToId(id);
     }
 
     const handleOpenChildLink = (childId) => {
       set(id);
-      alert(childId);
+      scrollToId(childId);
     }
   
     if (meta.hasChild) {
@@ -53,40 +55,15 @@ const Sidebar = () => {
     }
   }
 
+  const scrollToId = (id) => {
+    document.getElementById(`tod_${id}`).scrollIntoView();
+  }
+
   return (
     <div className="p-4 overflow-hidden">
       <div className="text-sm text-black">
         <div>
-          <ActiveMenu data={[
-            {
-              id: 1,
-              title: "Bikin buku cerita",
-              desc: `Mantap`,
-              meta: {
-                hasChild: false
-              }
-            },
-            {
-              id: 2,
-              title: "Bikin buku karate",
-              desc: `Mantap`,
-              meta: {
-                hasChild: true,
-                child: [
-                  {
-                    id: 3,
-                    title: "Karate Chop",
-                    desc: `Mantap`
-                  },
-                  {
-                    id: 55,
-                    title: "Axe Kick",
-                    desc: `Mantap`
-                  },
-                ]
-              }
-            },
-          ]} />
+          <ActiveMenu data={art.articles} />
         </div>
       </div>
       <hr className="my-2" />
