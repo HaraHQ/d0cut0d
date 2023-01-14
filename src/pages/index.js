@@ -1,6 +1,6 @@
 import * as React from "react"
 import DefaultLayout from "../components/layouts/default.layout";
-import ogImage from "../../public/og_image.gif"
+import ogImage from "../components/image/og_image.gif"
 
 const IndexPage = () => {
   return (
